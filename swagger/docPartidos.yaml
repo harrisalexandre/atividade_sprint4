@@ -1,0 +1,356 @@
+openapi: 3.0.1
+info: 
+  title: API REST - Avaliação Compasso UOL
+  description: API com finalidade de realizar operações entre partidos e seus associados
+  version: 1.0.0
+  termsOfService: https://compassouol.com/
+  contact:
+    name: Harris Alexandre
+    email: harrisalexandre308@gmail.com
+  license:
+    name: Licença GPLv3
+    url: https://www.gnu.org/licenses/gpl-3.0.html
+servers:
+- url: http://localhost:8080
+  description: API Local
+paths:
+  /partidos:
+    post:
+      tags:
+        - partidos
+      summary: Cadastra um novo partido
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: "#/components/schemas/PartidoForm"
+      responses:
+        201:
+          description: Cadastrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Partido"
+    get:
+      tags:
+        - partidos
+      summary: Recupera todos os partidos
+      description: Pode recuperar todos os partidos ou os partidos de determinada ideologia
+      parameters:
+      - name: ideologia
+        in: query
+        schema:
+          type: string
+        required: false
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Partidos"
+  /partidos/{id}:
+    get:
+      tags:
+        - partidos
+      summary: Recupera o partido de determinado ID
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: integer
+        required: true
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Partido"
+        404:
+          description: Partido não encontrado
+    put:
+      tags:
+        - partidos
+      summary: Atualiza o partido de determinado ID
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: integer
+        required: true
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: "#/components/schemas/PartidoForm"
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Partido"
+        404:
+          description: Partido não encontrado
+    delete:
+      tags:
+        - partidos
+      summary: Remove o partido de determinado ID
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: integer
+        required: true
+      responses:
+        200:
+          description: Sucesso
+        404:
+          description: Partido não encontrado
+  /partidos/{id}/associados:
+    get:
+      tags:
+        - partidos
+      summary: Recupera todos os associados de um determinado partido
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: integer
+        required: true
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Associados"
+        404:
+          description: Partido não encontrado
+  /associados:
+    post:
+      tags:
+        - associados
+      summary: Cadastra um novo associado
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: "#/components/schemas/AssociadoForm"
+      responses:
+        201:
+          description: Cadastrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Associado"
+    get:
+      tags:
+        - associados
+      summary: Recupera todos os associados
+      description: Pode recuperar todos os associados ou os associados de determinado cargo político
+      parameters:
+      - name: cargo
+        in: query
+        schema:
+          type: string
+        required: false
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Associados"
+  /associados/partidos:
+    post:
+      tags:
+        - associados
+      summary: Vincula um associado a um partido
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: "#/components/schemas/BindForm"
+      responses:
+        201:
+          description: Cadastrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Associado"
+  /associados/{id}:
+    get:
+      tags:
+        - associados
+      summary: Recupera o associado de determinado ID
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: integer
+        required: true
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Associado"
+        404:
+          description: Associado não encontrado
+    put:
+      tags:
+        - associados
+      summary: Atualiza o associado de determinado ID
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: integer
+        required: true
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: "#/components/schemas/AssociadoForm"
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Associado"
+        404:
+          description: Partido não encontrado
+    delete:
+      tags:
+        - associados
+      summary: Remove o associado de determinado ID
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: integer
+        required: true
+      responses:
+        200:
+          description: Sucesso
+        404:
+          description: Associado não encontrado
+  /associados/{idA}/partidos/{idP}:
+    delete:
+      tags:
+        - associados
+      summary: Remove determinado associado daquele partido
+      parameters:
+      - name: idA
+        in: path
+        schema:
+          type: integer
+        required: true
+      - name: idP
+        in: path
+        schema:
+          type: integer
+        required: true
+      responses:
+        200:
+          description: Sucesso
+        404:
+          description: Associado ou partido não encontrado
+tags:
+  - name: partidos
+    description: Realiza operações na entidade Partido
+  - name: associados
+    description: Realiza operações na entidade Associado
+components:
+  schemas:
+    Partido:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: "1"
+        nome:
+          type: string
+          example: "Partido Livre"
+        sigla:
+          type: string
+          example: "PL"
+        ideologia:
+          type: string
+          example: "CENTRO"
+        dataFundacao:
+          type: string
+          format: date
+          example: "01/01/2021"
+          pattern: "DD-MM-YYYY"
+    Partidos:
+      type: array
+      items:
+        $ref: "#/components/schemas/Partido"
+    PartidoForm:
+      type: object
+      properties:
+        nome:
+          type: string
+          example: "Partido Livre"
+        sigla:
+          type: string
+          example: "PL"
+        ideologia:
+          type: string
+          example: "CENTRO"
+        dataFundacao:
+          type: string
+          format: date
+          example: "2021-01-01"
+          pattern: "YYYY-MM-DD"
+    Associado:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: "1"
+        nome:
+          type: string
+          example: "Getúlio Vargas"
+        cargoPolitico:
+          type: string
+          example: "PRESIDENTE"
+        dataNascimento:
+          type: string
+          format: date
+          example: "01/01/2021"
+          pattern: "DD-MM-YYYY"
+        sexo:
+          type: string
+          example: "MASCULINO"
+    Associados:
+      type: array
+      items:
+        $ref: "#/components/schemas/Associado"
+    AssociadoForm:
+      type: object
+      properties:
+        nome:
+          type: string
+          example: "Getúlio Vargas"
+        dataNascimento:
+          type: string
+          format: date
+          example: "01/01/2021"
+          pattern: "DD-MM-YYYY"
+        sexo:
+          type: string
+          example: "MASCULINO"
+    BindForm:
+      type: object
+      properties:
+        idAssociado:
+          type: integer
+        idPartido:
+          type: integer
+        
