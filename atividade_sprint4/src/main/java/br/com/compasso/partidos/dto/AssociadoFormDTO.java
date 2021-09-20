@@ -11,20 +11,16 @@ import javax.validation.constraints.NotNull;
 
 public class AssociadoFormDTO {
 
-	@NotNull
-	@NotEmpty
+	@NotEmpty(message = "nome is required")
 	private String nome;
 
-	@NotNull
-	@NotEmpty
+	@NotNull(message = "cargoPolitico is required")
 	private CargoPolitico cargoPolitico;
 
-	@NotNull
-	@NotEmpty
+	@NotNull(message = "data is required")
 	private Date dataNascimento;
 
-	@NotNull
-	@NotEmpty
+	@NotNull(message = "sexo is required")
 	private Sexo sexo;
 
 	public void setCargoPolitico(String cargoPoliticoS) {

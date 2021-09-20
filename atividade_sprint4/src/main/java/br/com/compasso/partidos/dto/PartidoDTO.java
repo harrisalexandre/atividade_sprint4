@@ -1,9 +1,12 @@
 package br.com.compasso.partidos.dto;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import org.modelmapper.ModelMapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,7 +26,7 @@ public class PartidoDTO {
 	private Date dataFundacao;
 	
 	@JsonIgnore
-	 private List<Associado> associados;
+	private List<Associado> associados;
 
 	public PartidoDTO(Partido partido) {
 		this.id = partido.getId();
@@ -40,7 +43,11 @@ public class PartidoDTO {
 		return dataFundacao;
 	}
 	
-	public List<Associado> retornaAssociados() {
-		return this.associados;
+	public List<AssociadoDTO> retornaAssociados(ModelMapper mapper) {
+		List<AssociadoDTO> associados = new ArrayList<AssociadoDTO>();
+		this.associados.forEach(a -> {
+			associados.add(mapper.map(a, AssociadoDTO.class));
+		});
+		return associados;
 	}
 }

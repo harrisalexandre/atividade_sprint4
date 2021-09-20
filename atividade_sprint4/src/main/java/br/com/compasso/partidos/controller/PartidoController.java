@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,11 @@ public class PartidoController {
 	@Autowired
 	private PartidoRepository partidoRepository;
 	
+	@Autowired
+	private ModelMapper mapper;
+	
 	@PostMapping
-	public ResponseEntity<PartidoDTO> save(@RequestBody PartidoFormDTO form) {
+	public ResponseEntity<PartidoDTO> save(@RequestBody @Valid PartidoFormDTO form) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(service.save(form));
 	}
@@ -63,10 +67,10 @@ public class PartidoController {
 	}
 	
 	@GetMapping("/{id}/associados")
-	public ResponseEntity<List<Associado>> findAssociados(@PathVariable Long id){
+	public ResponseEntity<List<AssociadoDTO>> findAssociados(@PathVariable Long id){
 		Optional<Partido> partido = partidoRepository.findById(id);
 		if(partido.isPresent()) {
-			return ResponseEntity.ok().body(service.findById(partido).retornaAssociados());
+			return ResponseEntity.ok().body(service.findById(partido).retornaAssociados(mapper));
 		}
 		return ResponseEntity.notFound().build();
 	}

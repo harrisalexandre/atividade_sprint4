@@ -10,20 +10,16 @@ import javax.validation.constraints.NotNull;
 
 public class PartidoFormDTO {
 
-	@NotNull
-	@NotEmpty
+	@NotEmpty(message = "nome is required")
 	private String nome;
 
-	@NotNull
-	@NotEmpty
+	@NotEmpty(message = "sigla is required")
 	private String sigla;
 
-	@NotNull
-	@NotEmpty
+	@NotNull(message = "ideologia is required")
 	private Ideologia ideologia;
 
-	@NotNull
-	@NotEmpty
+	@NotNull(message = "dataFundacao is required")
 	private Date dataFundacao;
 
 	public void setIdeologia(String ideologiaS) {
@@ -36,6 +32,7 @@ public class PartidoFormDTO {
 		gc.add(gc.DATE, 1);
 		this.dataFundacao = gc.getTime();
 	}
+
 
 	public String getNome() {
 		return nome;

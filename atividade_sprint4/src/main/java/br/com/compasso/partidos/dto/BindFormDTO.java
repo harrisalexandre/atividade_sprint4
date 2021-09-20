@@ -1,8 +1,13 @@
 package br.com.compasso.partidos.dto;
 
-public class BindFormDTO {
+import javax.validation.constraints.NotNull;
 
+public class BindFormDTO {
+	
+	@NotNull(message = "Id do associado é necessário")
 	private Long idAssociado;
+	
+	@NotNull(message = "Id do partido é necessário")
 	private Long idPartido;
 
 	public Long getIdAssociado() {
@@ -21,4 +26,6 @@ public class BindFormDTO {
 		this.idPartido = idPartido;
 	}
 
+
+	
 }
